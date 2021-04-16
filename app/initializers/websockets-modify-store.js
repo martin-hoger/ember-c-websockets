@@ -1,4 +1,3 @@
-// import { Model } from 'ember-data';
 import DS from 'ember-data';
 import { inject } from '@ember/service';
 

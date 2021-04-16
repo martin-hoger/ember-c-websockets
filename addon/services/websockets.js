@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 import { inject } from '@ember/service';
-import { io } from "socket.io-client";
+import { io } from "./socket.io";
+// import { io } from "./../../socket.io";
 import { camelize } from '@ember/string';
 import { capitalize } from '@ember/string'
 import { later, schedule } from '@ember/runloop';
