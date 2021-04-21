@@ -1,15 +1,18 @@
 import Service from '@ember/service';
 import { inject } from '@ember/service';
-import { io } from "./socket.io";
-// import { io } from "./../../socket.io";
+
+// Npm module socket.io-client didn't work with an older version of Ember. Therefore the library is locally included here.
+// Unfortunately with Ember Ocatane, import { io } from './socket.io' didn't work.
+import * as ioScript from './socket.io'
+// import { io } from "./socket.io";
 import { camelize } from '@ember/string';
 import { capitalize } from '@ember/string'
 import { later, schedule } from '@ember/runloop';
 
 export default Service.extend({
 
-  cookies : inject(),
-  store   : inject(),
+  cookies   : inject(),
+  store     : inject(),
 
   socket    : null,
   socketKey : null,
