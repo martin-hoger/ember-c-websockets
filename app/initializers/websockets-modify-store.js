@@ -21,10 +21,10 @@ export default {
       cookies    : inject(),
 
       save() {
-        this._super();
         if (this.get('websockets.socketKey')) {
           this.cookies.write('websocket-key', this.get('websockets.socketKey'), { path: '/' });
         }
+        return this._super();
       }
 
     });
