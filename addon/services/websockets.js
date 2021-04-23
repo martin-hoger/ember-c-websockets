@@ -4,13 +4,6 @@ import { camelize } from '@ember/string';
 import { capitalize } from '@ember/string'
 import { later, schedule } from '@ember/runloop';
 
-// Npm module socket.io-client didn't work with an older version of Ember. 
-// Therefore the library is locally included here.
-// Unfortunately with Ember Ocatane, import { io } from './socket.io' didn't work.
-// import * as ioScript from './socket.io'
-import { io } from "./socket.io";
-// import { io } from "socket.io-client";
-
 export default Service.extend({
 
   cookies   : inject(),
@@ -27,18 +20,19 @@ export default Service.extend({
     // Connect to the websockets server.
     keys = keys ? keys : [];
     this.socket = io.connect({
-        path       : "/websockets",
-        transports : ["websocket"],
-        query      : { "keys": keys.join(",") }
+        path       : '/websockets',
+        transports : ['websocket'],
+        query      : { 'keys': keys.join(',') }
     });
     // Once connected, setup the socket key.
-    this.socket.on("connect", () => {
-      this.socketKey = "socket-" + this.socket.id;
+    this.socket.on('connect', () => {
+      console.log('Webockets connected');
+      this.socketKey = 'socket-' + this.socket.id;
       this.cookies.write('websocket-key', this.socketKey, { path: '/' });
     });
     // Handle events.
     this.socket.onAny((eventName, eventParams) => {
-      console.log("Webockets notification recieved");
+      console.log('Webockets notification recieved');
       var eventConfig = this.getEventConfig(eventName, eventParams);
       if (!eventConfig) {
         console.log(`Error: Webockets event config not found for model name "${eventParams.modelName}".`);
@@ -116,7 +110,7 @@ export default Service.extend({
 
   // Handle event: model delete (default)
   eventModelDelete(params, eventConfig) {
-    console.log("unload");
+    console.log('unload');
     var object = this.store.peekRecord(params.modelName, params.modelId)
     if (object && !object.isDeleted) {
       if (eventConfig.updateParents) {
