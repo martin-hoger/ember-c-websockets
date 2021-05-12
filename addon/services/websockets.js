@@ -65,8 +65,24 @@ export default Service.extend({
 
   // Check the current URL.
   isUrlMatching(eventConfig, eventParams) {
-    // TODO check the URL here eventConfig.url if defined
-    console.log(window.location.pathname);
+    if (eventConfig.urls) {
+      var eventUrl = eventConfig.urls[0];
+
+      if (eventUrl) {
+        if (eventParams.parentModelId) {
+          var eventUrl = eventUrl.replace(/{{parent-model-id}}/, eventParams.parentModelId);
+        }
+        if (eventParams.modelId) {
+          var eventUrl = eventUrl.replace(/{{model-id}}/, eventParams.modelId);
+        }
+        var actualUrl = window.location.pathname;
+        if (actualUrl.match(eventUrl)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
     return true;
   },
 
