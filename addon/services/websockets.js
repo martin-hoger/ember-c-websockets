@@ -63,28 +63,34 @@ export default Service.extend({
     return eventConfig;
   },
 
-  // Check the current URL.
+  //Check the current URLs.
   isUrlMatching(eventConfig, eventParams) {
-    if (eventConfig.urls) {
-      var eventUrl = eventConfig.urls[0];
+    var eventUrls  = eventConfig.urls;
+    var isMatching = false;
 
-      if (eventUrl) {
+    //URL params are defined.
+    if (eventUrls && eventUrls.length) {
+      eventUrls.forEach((eventUrl) => {
         if (eventParams.parentModelId) {
-          var eventUrl = eventUrl.replace(/{{parent-model-id}}/, eventParams.parentModelId);
+          eventUrl = eventUrl.replace(/{{parent-model-id}}/, eventParams.parentModelId);
         }
         if (eventParams.modelId) {
-          var eventUrl = eventUrl.replace(/{{model-id}}/, eventParams.modelId);
+          eventUrl = eventUrl.replace(/{{model-id}}/, eventParams.modelId);
         }
         var actualUrl = window.location.pathname;
         if (actualUrl.match(eventUrl)) {
-          return true;
-        } else {
-          return false;
+          //URL is matching.
+          isMatching = true;
         }
-      }
+      });
+    } else {
+      //URL params are not defined => allowed it.
+      isMatching = true;
     }
-    return true;
+
+    return isMatching;
   },
+  
 
   // Get function that would handle this event (or model).
   //
