@@ -117,12 +117,18 @@ export default Service.extend({
   },
   
   // Handle event: model update (default)
-  eventModelUpdate(params, eventConfig) {
+  eventModelUpdate(params, eventConfig, callback) {
     var existingObject = this.store.peekRecord(params.modelName, params.modelId)
     this.store.findRecord(params.modelName, params.modelId).then((object) => {
+      if (callback) {
+        callback(object);
+      }
       if (eventConfig.updateParents && !existingObject) {
         eventConfig.updateParents.forEach((parentPath) => {
-            object.get(parentPath).pushObject(object);
+          var parentObject = object.get(parentPath); 
+          if (parentObject) {
+            parentObject.pushObject(object);
+          }
         });
       }
     }).catch(() => {
@@ -131,8 +137,7 @@ export default Service.extend({
   },
 
   // Handle event: model delete (default)
-  eventModelDelete(params, eventConfig) {
-    console.log('unload');
+  eventModelDelete(params, eventConfig, callback) {
     var object = this.store.peekRecord(params.modelName, params.modelId)
     if (object && !object.isDeleted) {
       if (eventConfig.updateParents) {
@@ -141,6 +146,10 @@ export default Service.extend({
         });
       }
       object.unloadRecord();
+      if (callback) {
+        callback(object);
+      }
+
     }
   },
 
