@@ -44,8 +44,8 @@ export default Service.extend({
       var handlerFunction = eventConfig.handlerFunction ? eventConfig.handlerFunction : this.getHandlerFunction(eventName, eventParams);
       if (handlerFunction) {
         schedule('afterRender', () => {
-          console.log(handlerFunction);
-          console.log(eventParams, eventConfig);
+          // console.log(handlerFunction);
+          // console.log(eventParams, eventConfig);
           this[handlerFunction](eventParams, eventConfig);
         });
       } else {
