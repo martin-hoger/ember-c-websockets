@@ -9,11 +9,18 @@ export default Service.extend({
   cookies   : inject(),
   store     : inject(),
 
-  socket    : null,
-  socketKey : null,
+  socket        : null,
+  socketKey     : null,
+  isInitialized : false,
   
   // Start the websockets client.
   start(keys) {
+    // Is websockets already initialized.
+    if (this.isInitialized) {
+      return;
+    }
+    this.isInitialized = true;
+
     if (this.socket) {
       return;
     }
